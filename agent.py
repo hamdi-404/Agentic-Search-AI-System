@@ -396,37 +396,10 @@ class AgenticSearchAgent:
 
 
 def main():
-    """Example usage of the Agentic Search Agent"""
 
-    print("🤖 Loading Qwen2.5-7B-Instruct model...")
-
-    # Create agent (no API key needed)
     agent = AgenticSearchAgent()
-
-    # Example goals
-    example_goals = [
-        "What is the current price of Bitcoin?",
-        "Explain how photosynthesis works",
-        "What are the latest developments in quantum computing?",
-    ]
-
-    print("=" * 80)
-    print("🤖 AGENTIC SEARCH AI SYSTEM (Qwen2.5-1.5B)")
-    print("=" * 80)
-
-    for goal in example_goals[:1]:  # Process first goal as example
-        result = agent.process_goal(goal)
-
-        print("\n" + "=" * 80)
-        print("📋 FINAL RESULT")
-        print("=" * 80)
-        print(f"\nGoal: {result['goal']}")
-        print(f"Search Performed: {result['search_performed']}")
-        if result['search_performed']:
-            print(f"Number of Searches: {result['searches_count']}")
-        print(f"\nAnswer:\n{result['answer']}")
-        print("\n" + "=" * 80)
 
 
 if __name__ == "__main__":
+
     main()
