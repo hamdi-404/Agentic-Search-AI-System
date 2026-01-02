@@ -211,9 +211,8 @@ class AgenticSearchAgent:
 
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            # Extract search results
             results = []
-            search_results = soup.find_all('div', class_='result')[:5]  # Get top 5 results
+            search_results = soup.find_all('div', class_='result')[:5]  
             print(f"   Found {len(search_results)} search result elements")
 
             for result in search_results:
@@ -233,7 +232,6 @@ class AgenticSearchAgent:
                     })
                     print(f"   Added result: {title[:50]}...")
 
-            # If no results found, provide a fallback
             if not results:
                 print(f"   No results found, creating fallback")
                 results = [{
@@ -275,7 +273,6 @@ class AgenticSearchAgent:
             for result in results[:3]:
                 content = result.get('content', '')
                 if content and len(content) > 20:
-                    # Take first 200 chars as useful info
                     useful_info.append(content[:200])
 
             evaluation = {
@@ -333,19 +330,17 @@ class AgenticSearchAgent:
         """
         Main agentic workflow: process a goal from start to finish.
         """
-        print(f"\n🎯 Processing goal: {goal}\n")
+        print(f"\n Processing goal: {goal}\n")
 
-        # Initialize memory
         self.initialize_memory(goal)
 
-        # Step 1: Decide if search is needed
-        print("🤔 Deciding if web search is needed...")
+        print(" Deciding if web search is needed...")
         decision = self.decide_search_necessity(goal)
         print(f"   Decision: {'Search needed' if decision['search_needed'] else 'No search needed'}")
         print(f"   Reasoning: {decision['reasoning']}\n")
 
         if not decision["search_needed"]:
-            print("📝 Generating answer from existing knowledge...\n")
+            print(" Generating answer from existing knowledge...\n")
             return {
                 "goal": goal,
                 "search_performed": False,
@@ -353,12 +348,10 @@ class AgenticSearchAgent:
                 "memory": asdict(self.memory) if self.memory else {}
             }
 
-        # Step 2: Generate search queries
-        print("🔍 Generating search queries...")
+        print(" Generating search queries...")
         queries = self.generate_search_queries(goal, decision.get("information_needed", []))
         print(f"   Generated {len(queries)} queries: {queries}\n")
 
-        # Step 3: Perform searches and evaluate
         search_count = 0
         for query in queries:
             if search_count >= max_searches:
@@ -368,8 +361,7 @@ class AgenticSearchAgent:
             results = self.perform_web_search(query)
             print(f"   Retrieved {len(results)} results")
 
-            # Evaluate results
-            print("📊 Evaluating results...")
+            print(" Evaluating results...")
             evaluation = self.evaluate_search_results(goal, query, results)
             print(f"   Relevance: {evaluation['relevance_score']:.2f}")
             print(f"   Key takeaways: {evaluation['key_takeaways'][:100]}...")
@@ -377,13 +369,12 @@ class AgenticSearchAgent:
             search_count += 1
 
             if not evaluation.get("need_more_search", False):
-                print("   ✅ Sufficient information gathered\n")
+                print("    Sufficient information gathered\n")
                 break
             else:
-                print(f"   ⚠️  Need more information: {evaluation.get('gaps', [])}\n")
+                print(f"    Need more information: {evaluation.get('gaps', [])}\n")
 
-        # Step 4: Synthesize final answer
-        print("📝 Synthesizing final answer...\n")
+        print(" Synthesizing final answer...\n")
         final_answer = self.synthesize_answer(goal)
 
         return {
@@ -403,3 +394,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
